@@ -4,6 +4,7 @@ import moviesRouter from './api/movies';
 import moviesRouter1 from './api/genres';
 import './db';
 import './seedData'
+import usersRouter from './api/users';
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ app.use(express.json());
 
 app.use('/api/movies', moviesRouter);
 app.use('/api/genres', moviesRouter1);
+//Users router
+app.use('/api/users', usersRouter);
 
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
