@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import moviesRouter from './api/movies';
-import moviesRouter1 from './api/genres';
+import genresRouter from './api/genres';
+import usersRouter from './api/users';
 import './db';
 import './seedData'
-import usersRouter from './api/users';
+
 
 const errHandler = (err, req, res, next) => {
   /* if the error in development then send stack trace to display whole error,
@@ -24,8 +25,7 @@ const port = process.env.PORT;
 app.use(express.json());
 
 app.use('/api/movies', moviesRouter);
-app.use('/api/genres', moviesRouter1);
-//Users router
+app.use('/api/genres', genresRouter);
 app.use('/api/users', usersRouter);
 app.use(errHandler);
 app.listen(port, () => {
