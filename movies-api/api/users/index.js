@@ -19,8 +19,13 @@ router.post('/',asyncHandler( async (req, res, next) => {
       return next();
     }
     if (req.query.action === 'register') {
-      await User.create(req.body);
-      res.status(201).json({code: 201, msg: 'Successful created new user.'});
+      var reg=/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
+      if(reg.test(req.body.username)){
+        await User.create(req.body);
+        res.status(201).json({code: 201, msg: 'Successful created new user.'});
+      }else{
+        res.status(401).json({success: false, msg: 'This is not a good password format.'});
+      }
     } else {
       const user = await User.findByUserName(req.body.username);
         if (!user) return res.status(401).json({ code: 401, msg: 'Authentication failed. User not found.' });
@@ -56,14 +61,18 @@ router.get('/:userName/favourites', asyncHandler( async (req, res) => {
   res.status(200).json(user.favourites);
 }));
 
-//Add a favourite. No Error Handling Yet. Can add duplicates too!
+//Add a favourite
 router.post('/:userName/favourites', asyncHandler(async (req, res) => {
   const newFavourite = req.body.id;
   const userName = req.params.userName;
   const movie = await movieModel.findByMovieDBId(newFavourite);
   const user = await User.findByUserName(userName);
+  if(user.favourites.indexOf(movie._id)==-1){
   await user.favourites.push(movie._id);
   await user.save(); 
   res.status(201).json(user); 
+  }else {
+    res.status(404).json({ code: 404, msg: 'cannot add duplicates' });
+  }
 }));
 export default router;
