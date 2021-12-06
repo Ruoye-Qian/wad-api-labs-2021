@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     res.status(200).json(users);
 });
 
-// Register OR authenticate a user
+// Register And authenticate a user
 router.post('/',asyncHandler( async (req, res, next) => {
     if (!req.body.username || !req.body.password) {
       res.status(401).json({success: false, msg: 'Please pass username and password.'});
